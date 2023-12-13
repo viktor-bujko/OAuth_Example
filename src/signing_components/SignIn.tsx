@@ -7,7 +7,6 @@ import LoginForm from "./LoginForm";
 import LoginHeader from './LoginHeader';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
 const defaultTheme = createTheme();
 
 export default function SignIn() {

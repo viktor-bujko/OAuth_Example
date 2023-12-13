@@ -7,6 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import GoogleIcon from '@mui/icons-material/Google';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
+import { handleGoogleOAuthSignIn } from "../google_oauth/oauth";
 
 const LoginForm = () => {
 
@@ -70,7 +71,7 @@ const LoginForm = () => {
         startIcon={<GoogleIcon />}
         variant="contained"
         sx={{ mt: 0, mb: 2 }}
-        onClick={() => {}}
+        onClick={handleGoogleOAuthSignIn}
       >
         Sign In Using Google Account
       </Button>
