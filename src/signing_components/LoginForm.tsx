@@ -32,7 +32,7 @@ const LoginForm = () => {
 
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-      <TextField
+      {/* <TextField
         margin="normal" 
         required
         fullWidth
@@ -56,7 +56,7 @@ const LoginForm = () => {
         control={<Checkbox checked={state.checked} value="remember" color="primary" />}
         label="Remember me"
         onChange={() => handleCheckboxSet(state.checked)}
-      />
+      /> */}
       <Button
         type="submit"
         fullWidth
@@ -78,7 +78,7 @@ const LoginForm = () => {
       <div className="g-signin2" ></div>
       <Grid container>
         <Grid item xs>
-          <Link href="#" variant="body2">
+          <Link href="/auth" variant="body2">
             Forgot password?
           </Link>
         </Grid>

@@ -2,44 +2,20 @@ import axios, { AxiosResponse } from "axios";
 import GoogleOAuthRequestPreparator from "./GoogleOAuthRequestPreparator";
 import GoogleCodeVerifierChallengeGenerator from "./GoogleCodeVerifierChallengeGenerator";
 import { Token, OAuthRequestPreparator, PkceVerifier } from "./interfaces";
+import { buildUrlFromParameters } from "../utils/urlBuilder";
 
 function buildAuthCodeRequestUrl(verifier: PkceVerifier, preparator: OAuthRequestPreparator): string {
 
   const parameters = preparator.prepareAuthCodeRequestParameters(verifier.challenge);
-
-  const urlParams: string = Object
-    .keys(parameters)
-    .map(key => {
-      const param = `${key}=${parameters[key]}`;
-      console.log(" URL parameter: ", param);
-      return param;
-    })
-    .join("&");
+  const finalAuthorisationUrl: string = buildUrlFromParameters(preparator.auth_uri, parameters, "Authorisation");
   
-  console.log(`Params array: ${urlParams}`);
-  
-  const finalAuthorisationUrl: string = [preparator.auth_uri, urlParams].join("?");
-  console.log("Authorisation URL: ", finalAuthorisationUrl);
-
   return finalAuthorisationUrl;
 }
 
 function buildTokenRequestUrl(verifier: PkceVerifier, preparator: OAuthRequestPreparator, code: string, state: string): string {
   const parameters = preparator.prepareTokenRequestParameters(code, verifier.verifier);
+  const finalTokenUrl: string = buildUrlFromParameters(preparator.token_uri, parameters, "Token");
 
-  const urlParams: string = Object
-    .keys(parameters)
-    .map(key => {
-      const param = `${key}=${parameters[key]}`;
-      console.log(" Token URL parameter: ", param);
-      return param;
-    })
-    .join("&");
-
-  console.log(`Token Params array: ${urlParams}`);
-  const finalTokenUrl: string = [preparator.token_uri, urlParams].join("?");
-  console.log("Final token URL: ", finalTokenUrl);
-  
   return finalTokenUrl;
 }
 
@@ -60,7 +36,7 @@ function retrieveToken(response: AxiosResponse<any, any>): Token {
 
   console.log("Token response: ", response);
   if (response.status !== 200) {
-    const msg = `Token request failed. Status: ${response.status}; ${response.statusText}`;
+    const msg = `Token request failed. Status: ${response.status}; ${response.statusText} ${response.data}`;
     console.error(msg);
     throw Error(msg);
   }
@@ -94,7 +70,7 @@ export async function handleGoogleOAuthSignIn() {
   // console.log("Token: ", token);
 }
 
-export async function handleGoogleOAuthTokenRetrieval(state: string, code: string, scope: string): Promise<Token> {
+export async function handleGoogleOAuthTokenRetrieval(state: string, code: string, scope: string): Promise<AxiosResponse<Token, any>> {
   const authCodeRequestPreparator: OAuthRequestPreparator = new GoogleOAuthRequestPreparator();
   const codeVerifierGenerator = new GoogleCodeVerifierChallengeGenerator();
 
@@ -102,10 +78,5 @@ export async function handleGoogleOAuthTokenRetrieval(state: string, code: strin
   
   const tokenUrl = buildTokenRequestUrl(verifier, authCodeRequestPreparator, code, state /**TODO */);
 
-  const tokenResponse = await axios.post(tokenUrl);
-
-  const token = retrieveToken(tokenResponse);
-  console.log("Token: ", token);
-  
-  return token;
+  return axios.post(tokenUrl);
 }
