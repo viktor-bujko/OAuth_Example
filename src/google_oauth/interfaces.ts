@@ -53,5 +53,5 @@ export interface OAuthRequestPreparator {
   token_uri: string;
   prepareAuthCodeRequestParameters: (challenge?: string) => OAuthAuthCodeRequestParams;
   prepareTokenRequestParameters: (code: string, verifier: string) => OAuthTokenRequestParams;
-  mockup: () => HTMLFormElement; //TODO:
+  getAuthCodeRequestForm: () => HTMLFormElement;
 }

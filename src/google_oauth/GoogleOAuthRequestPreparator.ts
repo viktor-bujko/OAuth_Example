@@ -20,7 +20,7 @@ class GoogleOAuthRequestPreparator implements OAuthRequestPreparator {
     this.token_uri = secret.web.token_uri;
   }
 
-  mockup = () => {
+  getAuthCodeRequestForm = () => {
     var form = document.createElement('form');
     form.setAttribute('method', 'GET'); // Send as a GET request.
     form.setAttribute('action', this.auth_uri);
@@ -33,6 +33,9 @@ class GoogleOAuthRequestPreparator implements OAuthRequestPreparator {
       charset: "alphanumeric"
     } as GenerateOptions);
 
+    // saving generated state for comparison
+    localStorage.setItem("localState", stateValue);
+    
     // Parameters to pass to OAuth 2.0 endpoint.
     var params = {
       client_id: secret.web.client_id,

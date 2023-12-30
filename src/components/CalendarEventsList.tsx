@@ -27,16 +27,20 @@ const CalendarEventsList = ({ events }: { events: EventResource[] }) => {
           {events.map((event, index) => {
             console.log(event);
 
+            if (event.status === "cancelled") {
+              return <></>;
+            }
+
             return (
               <TableRow
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell component="th" scope="row">{event.summary}</TableCell>
-                <TableCell align="right">{event.creator.email}</TableCell>
-                <TableCell align="right">{event.start.dateTime}</TableCell>
-                <TableCell align="right">{event.end.dateTime}</TableCell>
-                <TableCell align="right">{event.status}</TableCell>
+                <TableCell component="th" scope="row">{event?.summary ?? "N/A"}</TableCell>
+                <TableCell align="right">{event?.creator?.email ?? "N/A"}</TableCell>
+                <TableCell align="right">{event?.start?.dateTime ?? "N/A"}</TableCell>
+                <TableCell align="right">{event?.end?.dateTime ?? "N/A"}</TableCell>
+                <TableCell align="right">{event?.status ?? "N/A"}</TableCell>
               </TableRow>
             )
           })}
