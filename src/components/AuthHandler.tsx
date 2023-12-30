@@ -33,6 +33,8 @@ const AuthHandler = ({ tokenState }) => {
       const retrievedToken: Token = tokenResponse.data;
       
       setToken(retrievedToken);
+      localStorage.setItem("token", JSON.stringify(retrievedToken));
+      console.log("Set new access token");
       setDisabled(true);
 
       setProgressMsg("Writing accesstoken to file");

@@ -101,6 +101,27 @@ const ShowCalendarEvents = ({ token }: { token: Token }) => {
     return uriTemplate.replace(clientData.calendar_list_uri_template.toReplace, replacementValue);
   }
 
+  function getTokenFromLocalStorage(): Token {
+
+    const localTokenString = localStorage.getItem("token");
+    const empty: Token = {
+      access_token: "",
+      expires_in: 0,
+      refresh_token: "",
+      scope: "",
+      token_type: "Bearer"
+    } as Token;
+
+    if (localTokenString === null) {
+      console.log("Returning empty access token from local storage");
+      return empty;
+    }
+
+    const localToken = JSON.parse(localTokenString) as Token;
+    console.log("Returning from local storage: ", localToken);
+    return localToken;
+  }
+
   const getCalendarEvents = () => {
 
     const url: string = populateCalendarEventsListEndpointPlaceholder();
@@ -114,10 +135,14 @@ const ShowCalendarEvents = ({ token }: { token: Token }) => {
 
     console.log(requestParameters)
 
+    console.log("Token parameter: ", token);
+    const finalToken: Token = (token === null || token === undefined || Object.keys(token).length === 0)
+      ? getTokenFromLocalStorage()
+      : token;
     const requestUrl: string = buildUrlFromParameters(url, requestParameters, "EventsList GET");
     const requestHeader = {
       headers: {
-        "Authorization": [token.token_type, token.access_token].join(" ")
+        "Authorization": [finalToken.token_type, finalToken.access_token].join(" ")
       }
     }
 
