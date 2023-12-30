@@ -22,7 +22,7 @@ interface RequestParams {
 }
 
 export interface OAuthAuthCodeRequestParams extends RequestParams {
-  response_type: "code" | "pkce",
+  response_type: "code",
   scope: string | string[],
   state: string,
   code_challenge: string,
@@ -39,19 +39,10 @@ export interface OAuthTokenRequestParams extends RequestParams {
 export interface GoogleOAuthAuthCodeRequestParams extends OAuthAuthCodeRequestParams { }
 export interface GoogleOAuthTokenRequestParams extends OAuthTokenRequestParams { }
 
-export interface PkceVerifier {
-  verifier: string,
-  challenge: string
-};
-
-export interface PkceCodeChallengeGenerator {
-  generateCodeVerifierAndChallenge: () => PkceVerifier;
-}
-
 export interface OAuthRequestPreparator {
   auth_uri: string;
   token_uri: string;
   prepareAuthCodeRequestParameters: (challenge?: string) => OAuthAuthCodeRequestParams;
-  prepareTokenRequestParameters: (code: string, verifier: string) => OAuthTokenRequestParams;
+  prepareTokenRequestParameters: (code: string) => OAuthTokenRequestParams;
   getAuthCodeRequestForm: () => HTMLFormElement;
 }

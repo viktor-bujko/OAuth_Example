@@ -85,7 +85,7 @@ class GoogleOAuthRequestPreparator implements OAuthRequestPreparator {
     } as GoogleOAuthAuthCodeRequestParams;
   };
 
-  prepareTokenRequestParameters(code: string, verifier: string): GoogleOAuthTokenRequestParams {
+  prepareTokenRequestParameters(code: string): GoogleOAuthTokenRequestParams {
 
     return {
       client_id: secret.web.client_id,
